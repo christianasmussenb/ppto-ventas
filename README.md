@@ -28,6 +28,7 @@ This workspace defaults to the locally available image `intersystemsdc/irishealt
 ```bash
 ./scripts/setup_iris.sh
 docker compose --env-file .env.docker up -d
+./scripts/register_store_console_webapp.sh
 ```
 
 To run a second IRIS instance beside an existing one, use the alternate launcher. It defaults to host port `52774`, container name `iris111-alt`, and the same workspace mount:
@@ -52,9 +53,10 @@ Use this flow when you already have another IRIS container running in the same D
 4. Start the secondary container with `./scripts/start_iris_alt.sh`.
 5. If you need a different name or port, override them with `IRIS_CONTAINER_NAME` and `IRIS_PORT`.
 6. Load the classes with `./scripts/load_classes.sh`.
-7. Load the master data with `./scripts/load_mock_master_data.sh`.
-8. Load the May 2026 mock month with `./scripts/load_may_2026_mock_data.sh`.
-9. Open the console at `/csp/store-console/` and verify the chart, the POS trace view, the loaded-data tab, and the SKU-by-category tab.
+7. Register the web app with `./scripts/register_store_console_webapp.sh`.
+8. Load the master data with `./scripts/load_mock_master_data.sh`.
+9. Load the May 2026 mock month with `./scripts/load_may_2026_mock_data.sh`.
+10. Open the validated entry page at `/csp/store-console/` and verify the chart, the POS trace view, the loaded-data tab, and the SKU-by-category tab.
 
 Operational notes:
 
@@ -74,7 +76,7 @@ python3 ./scripts/mock_data_loader.py
 
 ## UI
 
-The operational console is available in `frontend/` for local use, and the same screen is exposed from IRIS as the public web app `/csp/store-console/`. When loaded from IRIS CSP, it targets the REST controller at `/csp/store-console`.
+The operational console is available in `frontend/` for local use, and the same screen is exposed from IRIS as the public web app `/csp/store-console/`. The web app is a REST entry point handled by `API.UIController`. When loaded from IRIS CSP, it targets the REST controller at `/csp/user/API.UIController.cls`.
 
 The current console includes the main operational panel, raw POS trace view, hourly chart with budget overlay, and recommendation feedback flow.
 

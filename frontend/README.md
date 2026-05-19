@@ -14,7 +14,7 @@ This folder contains the mobile-first UI for IRIS111.
 1. Open `frontend/index.html` in a browser, or serve the folder with any static server.
 2. Set the API base URL in the connection panel.
 3. Load cadencia de ventas, pending recommendations, dashboard, and submit feedback from the same screen.
-4. In IRIS, the same UI is also exposed as the public web app `/store-console/`.
+4. In IRIS, the same UI is also exposed as the public web app `/csp/store-console/` and is handled by `API.UIController`.
 
 ## Notes
 

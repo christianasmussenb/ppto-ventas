@@ -21,4 +21,5 @@ fi
 
 echo "IRIS workspace scaffold ready at ${WORKSPACE_DIR}."
 echo "Start the container with: docker compose --env-file .env.docker up -d"
+echo "After the container is up, register the web app with: ./scripts/register_store_console_webapp.sh"
 echo "To start a second instance on another port, use: ./scripts/start_iris_alt.sh"

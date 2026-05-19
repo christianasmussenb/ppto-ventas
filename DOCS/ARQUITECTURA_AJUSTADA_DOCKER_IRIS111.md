@@ -19,6 +19,7 @@ El repositorio se opera hoy desde el workspace local con estos puntos de entrada
 - Carga de clases: `./scripts/load_classes.sh`
 - Carga de maestros: `./scripts/load_mock_master_data.sh`
 - Carga del mes mock de mayo: `./scripts/load_may_2026_mock_data.sh`
+- Registro de la web app de la consola: `./scripts/register_store_console_webapp.sh`
 - Consola operativa: `/csp/store-console/`
 
 ```mermaid
@@ -28,7 +29,7 @@ flowchart LR
   Compose[docker compose --env-file .env.docker up -d]
   Alt[./scripts/start_iris_alt.sh\n(puerto 52774 por defecto)]
   IRIS[IRIS Community ML\nintersystemsdc/irishealth-ml-community:latest]
-  Bootstrap[setup_iris.sh\nload_classes.sh\nload_mock_master_data.sh\nload_may_2026_mock_data.sh]
+  Bootstrap[setup_iris.sh\nload_classes.sh\nload_mock_master_data.sh\nload_may_2026_mock_data.sh\nregister_store_console_webapp.sh]
   Console[/csp/store-console/]
 
   VSCode --> Repo
