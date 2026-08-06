@@ -10,6 +10,8 @@ Este directorio agrupa la documentación de IRIS111.
 - [Documento conceptual PoC cumplimiento de presupuesto en tiempo real](./Documento_Conceptual_PoC_Cumplimiento_Presupuesto_Tiempo_Real_Grupo_Exito.md)
 - [Requerimientos Copilot en paralelo](./REQUERIMIENTOS_COPILOT_PARALELO_PoC.md)
 - [Prompts listos para Copilot](./COPILOT_PROMPTS_LISTOS.md)
+- [Patrones reutilizables](../.playbook/01-patrones-reutilizables.md)
+- [Aprendizajes y recomendaciones](../.playbook/02-aprendizajes-recomendaciones.md)
 
 ## Nota
 

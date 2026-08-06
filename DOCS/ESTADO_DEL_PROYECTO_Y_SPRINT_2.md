@@ -26,6 +26,10 @@ En la última iteración se sumaron mejoras concretas sobre la consola y la base
 - la gráfica horaria pasó a trabajar con unidades acumuladas,
 - el eje horario de la gráfica quedó alineado con la ventana operativa,
 - y la proyección de presupuesto se ajustó para respetar el horario de ventas sin alterar los totales diarios.
+- el contenedor `iris111` se recreó con `intersystems/iris-community:2026.1` en el puerto `52773`;
+- se recargaron 23 clases, maestros y el dataset mock de mayo 2026;
+- la consola CSP quedó accesible sin login y con lectura de datos;
+- y la UI selecciona la última fecha disponible cuando la fecha del sistema no coincide con el dataset.
 
 ## Cierre del sprint actual
 
@@ -42,9 +46,11 @@ Lo que sigue se toma como trabajo del siguiente sprint, con foco en endurecimien
 
 ### Infraestructura y entorno
 - El entorno Docker de IRIS quedó operativo con el contenedor `iris111`.
+- La imagen local efectiva es `intersystems/iris-community:2026.1` y el puerto principal es `52773`.
 - La carga de clases ObjectScript quedó automatizada con `scripts/load_classes.sh`.
 - Existe un runner de pruebas en `scripts/run_tests.sh`.
 - La documentación del proyecto está centralizada en `DOCS/` y la consola pública vive en `/csp/store-console/`.
+- La aplicación CSP usa `AutheEnabled=96` y el perfil `:%All` para permitir lectura anónima del namespace `USER`.
 
 ### Modelo e implementación
 - El presupuesto se importa y queda disponible para el recorrido POS.
@@ -79,19 +85,22 @@ Lo que sigue se toma como trabajo del siguiente sprint, con foco en endurecimien
 - Se comprobó que la vista de gráfica ya recibe categoría y SKU correctamente.
 - Se validó que `frontend/app.js` sigue parseando después de las últimas modificaciones.
 - Se regeneró el dataset de mayo 2026 para alinear el CSV horario con la proyección nueva de presupuesto.
+- Se verificó el estado persistido: 1 local, 10 categorías, 100 SKU, 3.152 presupuestos, 445 eventos Bronze, 435 ventas Silver y 870 filas Gold.
+- Se validaron con HTTP 200 `/csp/store-console/`, `/categories`, `/budgets` y `/health`.
 
 ## Paso a paso para llevar el proyecto a otro Docker con IRIS
 
 1. Asegura que el host Docker destino tenga el repositorio montado y que el puerto objetivo no esté ocupado.
-2. Usa la imagen `intersystemsdc/irishealth-ml-community:latest` como base del contenedor IRIS.
+2. Usa la imagen local `intersystems/iris-community:2026.1` como base del contenedor IRIS.
 3. Ejecuta `./scripts/setup_iris.sh` para regenerar `.env.docker` con la configuración local del workspace.
 4. Lanza la segunda instancia con `./scripts/start_iris_alt.sh`.
 5. Si hace falta, redefine `IRIS_PORT` e `IRIS_CONTAINER_NAME` antes de arrancar.
 6. Compila las clases con `./scripts/load_classes.sh`.
-7. Carga el maestro con `./scripts/load_mock_master_data.sh`.
-8. Si quieres la maqueta completa de mayo, ejecuta `./scripts/load_may_2026_mock_data.sh`.
-9. Abre `/csp/store-console/` y valida panel, gráfica, trx crudas, presupuestos, carga de datos y catálogo de SKUs.
-10. Si necesitas una segunda validación en paralelo, usa `./scripts/start_iris_alt.sh` de nuevo con otro puerto libre.
+7. Registra la aplicación CSP con `./scripts/register_store_console_webapp.sh`.
+8. Carga el maestro con `./scripts/load_mock_master_data.sh`.
+9. Si quieres la maqueta completa de mayo, ejecuta `./scripts/load_may_2026_mock_data.sh`.
+10. Abre `/csp/store-console/` y valida panel, gráfica, trx crudas, presupuestos, carga de datos y catálogo de SKUs.
+11. Si necesitas una segunda validación en paralelo, usa `./scripts/start_iris_alt.sh` de nuevo con otro puerto libre.
 
 ## Aprendizajes del sprint
 
@@ -121,6 +130,15 @@ El proyecto avanzó cuando las validaciones empezaron a leer el estado persistid
 
 ### 9. Un batch de reparación debe ser reusable
 La corrección del Bronze no podía quedar como un parche manual. Convertirla en servicio batch y script de ejecución dejó una herramienta mantenible para futuras correcciones masivas.
+
+### 10. CSP separa autenticación de permisos de lectura
+Una aplicación CSP puede devolver `200` y mostrar la UI, pero entregar listas vacías si el usuario anónimo no recibe el perfil correcto. En IRIS 2026.1, esta consola usa `AutheEnabled=96` y `MatchRoles=:%All`; el XML debe representar `MatchRoles` como una colección con `MatchRolesItem`.
+
+### 11. La fecha por defecto debe salir de los datos disponibles
+El sistema puede estar en una fecha posterior al dataset mock. La consola selecciona la última fecha de presupuesto cargada cuando el usuario no eligió una fecha, evitando un dashboard aparentemente vacío.
+
+### 12. Los scripts de registro deben propagar errores
+El importador CSP puede rechazar una etiqueta XML y dejar una salida engañosa si el script continúa. El registro debe usar el esquema exportado por IRIS y detenerse si `Security.Applications.Import` falla.
 
 ## Pendientes
 

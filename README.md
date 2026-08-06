@@ -23,13 +23,18 @@ Detailed project documentation lives in [DOCS/README.md](DOCS/README.md).
 
 The local IRIS environment is described in [DOCS/ARQUITECTURA_AJUSTADA_DOCKER_IRIS111.md](DOCS/ARQUITECTURA_AJUSTADA_DOCKER_IRIS111.md) and can be started from this repository with:
 
-This workspace defaults to the locally available image `intersystemsdc/irishealth-ml-community:latest` in [.env.docker](.env.docker) so the container can start without pulling a missing tag.
+This workspace uses the locally available image `intersystems/iris-community:2026.1` in [.env.docker](.env.docker) and exposes the main IRIS instance on host port `52773`.
 
 ```bash
 ./scripts/setup_iris.sh
 docker compose --env-file .env.docker up -d
+./scripts/load_classes.sh
 ./scripts/register_store_console_webapp.sh
+./scripts/load_mock_master_data.sh
+./scripts/load_may_2026_mock_data.sh
 ```
+
+La aplicación CSP se registra para acceso local sin login y con permisos de lectura sobre `USER`. Si la fecha actual no coincide con el dataset mock, la consola selecciona automáticamente la última fecha cargada.
 
 To run a second IRIS instance beside an existing one, use the alternate launcher. It defaults to host port `52774`, container name `iris111-alt`, and the same workspace mount:
 
@@ -48,7 +53,7 @@ IRIS_PORT=52775 IRIS_CONTAINER_NAME=iris111-lab ./scripts/start_iris_alt.sh
 Use this flow when you already have another IRIS container running in the same Docker host and want to bring IRIS111 up beside it.
 
 1. Verify that Docker is running and that the target host port is free. The alternate launcher defaults to port `52774`, which avoids the standard IRIS port mapping.
-2. If needed, edit `docker-compose.yml` or pass environment variables so the container uses the image `intersystemsdc/irishealth-ml-community:latest`.
+2. If needed, edit `docker-compose.yml` or pass environment variables so the container uses the image `intersystems/iris-community:2026.1`.
 3. Run `./scripts/setup_iris.sh` once to create or refresh `.env.docker` with the current workspace defaults.
 4. Start the secondary container with `./scripts/start_iris_alt.sh`.
 5. If you need a different name or port, override them with `IRIS_CONTAINER_NAME` and `IRIS_PORT`.

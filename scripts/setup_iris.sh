@@ -11,7 +11,7 @@ mkdir -p "${WORKSPACE_DIR}/frontend/src"
 
 if [[ ! -f "${WORKSPACE_DIR}/.env.docker" ]]; then
   cat > "${WORKSPACE_DIR}/.env.docker" <<EOF
-IRIS_IMAGE=intersystemsdc/irishealth-ml-community:latest
+IRIS_IMAGE=intersystems/iris-community:2026.1
 IRIS_CONTAINER_NAME=iris111
 IRIS_PORT=52773
 IRIS_PASSWORD=Demo123456!
