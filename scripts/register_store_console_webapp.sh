@@ -17,7 +17,7 @@ cat >/home/irisowner/store-console.xml <<'XML'
 <?xml version="1.0" encoding="UTF-8"?>
 <ApplicationsExport>
   <Applications>
-    <AutheEnabled>32</AutheEnabled>
+    <AutheEnabled>96</AutheEnabled>
     <AutoCompile>false</AutoCompile>
     <CookiePath>/csp/store-console/</CookiePath>
     <CorsCredentialsAllowed>true</CorsCredentialsAllowed>
@@ -35,6 +35,9 @@ cat >/home/irisowner/store-console.xml <<'XML'
     <JWTAccessTokenTimeout>60</JWTAccessTokenTimeout>
     <JWTRefreshTokenTimeout>900</JWTRefreshTokenTimeout>
     <LockCSPName>true</LockCSPName>
+    <MatchRoles>
+      <MatchRolesItem>:%All</MatchRolesItem>
+    </MatchRoles>
     <Name>/csp/store-console</Name>
     <NameSpace>USER</NameSpace>
     <Recurse>true</Recurse>
@@ -64,6 +67,7 @@ Set n=0
 Set sc=##class(Security.Applications).Import("/home/irisowner/store-console.xml",.n,0)
 Write $SYSTEM.Status.GetErrorText(sc),!
 Write n,!
+If $SYSTEM.Status.IsError(sc) Halt 1
 Halt
 IRISEOF
 EOS

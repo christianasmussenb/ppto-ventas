@@ -11,7 +11,7 @@
 
 El repositorio se opera hoy desde el workspace local con estos puntos de entrada:
 
-- Imagen base: `intersystemsdc/irishealth-ml-community:latest`
+- Imagen base: `intersystems/iris-community:2026.1`
 - Bootstrap del entorno: `./scripts/setup_iris.sh`
 - Arranque del contenedor principal: `docker compose --env-file .env.docker up -d`
 - Arranque del contenedor alterno: `./scripts/start_iris_alt.sh`
@@ -21,6 +21,7 @@ El repositorio se opera hoy desde el workspace local con estos puntos de entrada
 - Carga del mes mock de mayo: `./scripts/load_may_2026_mock_data.sh`
 - Registro de la web app de la consola: `./scripts/register_store_console_webapp.sh`
 - Consola operativa: `/csp/store-console/`
+- Seguridad de la consola: acceso sin login con `AutheEnabled=96` y perfil `:%All`
 
 ```mermaid
 flowchart LR
@@ -28,7 +29,7 @@ flowchart LR
   Repo[Workspace /Users/cab/VSCODE/iris111]
   Compose[docker compose --env-file .env.docker up -d]
   Alt[./scripts/start_iris_alt.sh\n(puerto 52774 por defecto)]
-  IRIS[IRIS Community ML\nintersystemsdc/irishealth-ml-community:latest]
+  IRIS[IRIS Community\nintersystems/iris-community:2026.1]
   Bootstrap[setup_iris.sh\nload_classes.sh\nload_mock_master_data.sh\nload_may_2026_mock_data.sh\nregister_store_console_webapp.sh]
   Console[/csp/store-console/]
 
@@ -56,7 +57,7 @@ flowchart LR
 
 # Supuesto: Ya tienes la imagen bajada
 docker images | grep iris-community
-# Debe mostrar: intersystemsdc/iris-community:2024.1-final (o similar)
+# Debe mostrar: intersystems/iris-community:2026.1
 
 # Crear contenedor iris111 con volúmenes montados
 docker run -d \
@@ -67,7 +68,7 @@ docker run -d \
   -v /home/user/iris-poc/data:/iris/data \
   -v /home/user/iris-poc/tests:/iris/tests \
   -v /home/user/iris-poc/frontend:/iris/frontend \
-  intersystemsdc/iris-community:2024.1-final
+  intersystems/iris-community:2026.1
 
 # Verificar que corre
 docker ps | grep iris111
@@ -454,7 +455,7 @@ docker run -d \
   -v /home/user/iris-poc/code:/iris/code \
   -v /home/user/iris-poc/data:/iris/data \
   -v /home/user/iris-poc/tests:/iris/tests \
-  intersystemsdc/iris-community:2024.1-final
+  intersystems/iris-community:2026.1
 
 # Ver estado
 docker ps | grep iris111
@@ -583,7 +584,7 @@ docker run -d \
   -v /home/user/iris-poc/code:/iris/code \
   -v /home/user/iris-poc/data:/iris/data \
   -v /home/user/iris-poc/tests:/iris/tests \
-  intersystemsdc/iris-community:2024.1-final
+  intersystems/iris-community:2026.1
 
 #### 1.3 Verificar
 docker ps | grep iris111  # ✓ Debe estar RUNNING
@@ -657,7 +658,7 @@ docker run -d \
   -v /home/user/iris-poc/code:/iris/code \
   -v /home/user/iris-poc/data:/iris/data \
   -v /home/user/iris-poc/tests:/iris/tests \
-  intersystemsdc/iris-community:2024.1-final
+  intersystems/iris-community:2026.1
 
 # Verificar
 docker ps | grep iris111
@@ -779,7 +780,7 @@ version: '3.8'
 
 services:
   iris:
-    image: intersystemsdc/iris-community:2024.1-final
+    image: intersystems/iris-community:2026.1
     container_name: iris111
     ports:
       - "52773:52773"

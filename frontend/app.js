@@ -351,6 +351,31 @@ function getDefaultChartDate() {
   return state.dashboardDate || state.paceDate || getCurrentUtcDate();
 }
 
+function syncLoadedDateDefaults() {
+  const latestBudgetDate = state.budgetRows
+    .map((item) => String(item?.budgetDate || '').trim())
+    .filter(Boolean)
+    .sort()
+    .at(-1);
+
+  if (!latestBudgetDate) {
+    return;
+  }
+
+  if (elements.paceDate && !elements.paceDate.value.trim()) {
+    elements.paceDate.value = latestBudgetDate;
+  }
+  if (elements.chartDate && !elements.chartDate.value.trim()) {
+    elements.chartDate.value = latestBudgetDate;
+  }
+  if (elements.budgetFilterDate && !elements.budgetFilterDate.value.trim()) {
+    elements.budgetFilterDate.value = latestBudgetDate;
+  }
+  if (elements.budgetDate && !elements.budgetDate.value.trim()) {
+    elements.budgetDate.value = latestBudgetDate;
+  }
+}
+
 function syncChartFiltersFromSelection() {
   if (elements.chartStoreCode && !elements.chartStoreCode.value.trim()) {
     elements.chartStoreCode.value = state.storeCode;
@@ -1789,7 +1814,11 @@ function wireEvents() {
 async function refreshAll() {
   readConfig();
   await loadCategories();
-  await Promise.all([loadHealth(), loadPace(), loadPendingRecommendations(), loadDashboard(), loadSalesChart(), loadRawPosEvents(), loadBudgets(), loadSkuCatalog()]);
+  await loadBudgets();
+  syncLoadedDateDefaults();
+  readConfig();
+  renderBudgets(filterBudgetRows(state.budgetRows));
+  await Promise.all([loadHealth(), loadPace(), loadPendingRecommendations(), loadDashboard(), loadSalesChart(), loadRawPosEvents(), loadSkuCatalog()]);
   renderLoadedInfo();
   renderStages();
 }
