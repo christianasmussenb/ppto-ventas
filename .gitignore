@@ -10,3 +10,4 @@ data/pos_feed/
 
 # Local environment files
 .env
+.env.docker
