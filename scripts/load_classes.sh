@@ -32,4 +32,17 @@ if [[ ${class_count} -eq 0 ]]; then
   exit 1
 fi
 
+# Compilar cada archivo por separado, en orden alfabetico, deja clases con
+# dependencias sin resolver si una referencia a otra que aun no fue cargada
+# (p.ej. API.UIController referencia Service.* que compila despues). El
+# sintoma es sutil: la clase compila 'exitosamente' pero queda con
+# IsUpToDate()=0 y su ruta REST/CSP responde 404 hasta el proximo recompile.
+# Una pasada final recursiva sobre el paquete completo lo resuelve.
+echo "Recompilando el paquete completo (resuelve dependencias entre archivos)..."
+docker exec -i "${CONTAINER_NAME}" bash -lc "/home/irisowner/bin/iris session ${INSTANCE_NAME} -U ${NAMESPACE}" <<EOF
+Set sc = \$system.OBJ.CompileAll("ck")
+Write !, "Recompile status: ", \$SYSTEM.Status.GetErrorText(sc), !
+Halt
+EOF
+
 echo "Class compilation finished for ${class_count} file(s)."

@@ -106,9 +106,17 @@ l2() {
 
 l3() {
   local cap=L3
-  local repo_count compiled_count
+  local repo_count compiled_count packages where_clause pkg first=1
   repo_count="$(find "${REPO_ROOT}/src" -name '*.cls' | wc -l | tr -d ' ')"
-  compiled_count="$(sql_count "SELECT COUNT(*) FROM %Dictionary.ClassDefinition WHERE System=0 AND (Name LIKE 'MD.%' OR Name LIKE 'Bronze.%' OR Name LIKE 'Silver.%' OR Name LIKE 'Gold.%' OR Name LIKE 'Config.%' OR Name LIKE 'Ops.%' OR Name LIKE 'Service.%' OR Name LIKE 'API.%')")"
+  # Paquetes reales, derivados del propio repo (el primer componente de cada
+  # "Class X.Y..." declarado), no una lista fija que puede quedar incompleta.
+  packages="$(find "${REPO_ROOT}/src" -name '*.cls' -exec grep -h '^Class ' {} + 2>/dev/null | sed -E 's/^Class ([A-Za-z0-9]+)\..*/\1/' | sort -u)"
+  where_clause=""
+  for pkg in ${packages}; do
+    if [[ ${first} -eq 1 ]]; then where_clause="Name LIKE '${pkg}.%'"; first=0
+    else where_clause="${where_clause} OR Name LIKE '${pkg}.%'"; fi
+  done
+  compiled_count="$(sql_count "SELECT COUNT(*) FROM %Dictionary.ClassDefinition WHERE System=0 AND (${where_clause})")"
   if [[ "${repo_count}" == "${compiled_count}" ]]; then
     pass "$cap" "clases_compiladas" "${compiled_count} (repo=${repo_count})"
   else
