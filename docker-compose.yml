@@ -1,6 +1,6 @@
 services:
   iris:
-    image: ${IRIS_IMAGE:-intersystems/iris-community:2026.1}
+    image: ${IRIS_IMAGE:-intersystemsdc/irishealth-ml-community:2026.1}
     container_name: ppto-ventas-iris
     networks: [default, htc21-net]
     mem_limit: 4g
