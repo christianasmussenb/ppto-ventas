@@ -23,7 +23,7 @@ Detailed project documentation lives in [DOCS/README.md](DOCS/README.md).
 
 The local IRIS environment is described in [DOCS/ARQUITECTURA_AJUSTADA_DOCKER_IRIS111.md](DOCS/ARQUITECTURA_AJUSTADA_DOCKER_IRIS111.md) and can be started from this repository with:
 
-This workspace uses the locally available image `intersystems/iris-community:2026.1` in [.env.docker](.env.docker) and exposes the main IRIS instance on host port `52773`.
+This workspace uses the image `intersystemsdc/irishealth-ml-community:2026.1` in [.env.docker](.env.docker) — same image and version as `noshow` and `manten` — and exposes the main IRIS instance on `127.0.0.1:52774`.
 
 ```bash
 ./scripts/setup_iris.sh
@@ -53,7 +53,7 @@ IRIS_PORT=52775 IRIS_CONTAINER_NAME=iris111-lab ./scripts/start_iris_alt.sh
 Use this flow when you already have another IRIS container running in the same Docker host and want to bring IRIS111 up beside it.
 
 1. Verify that Docker is running and that the target host port is free. The alternate launcher defaults to port `52774`, which avoids the standard IRIS port mapping.
-2. If needed, edit `docker-compose.yml` or pass environment variables so the container uses the image `intersystems/iris-community:2026.1`.
+2. If needed, edit `docker-compose.yml` or pass environment variables so the container uses the image `intersystemsdc/irishealth-ml-community:2026.1`.
 3. Run `./scripts/setup_iris.sh` once to create or refresh `.env.docker` with the current workspace defaults.
 4. Start the secondary container with `./scripts/start_iris_alt.sh`.
 5. If you need a different name or port, override them with `IRIS_CONTAINER_NAME` and `IRIS_PORT`.

@@ -5,7 +5,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WORKSPACE_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
-DEFAULT_IMAGE="intersystems/iris-community:2026.1"
+DEFAULT_IMAGE="intersystemsdc/irishealth-ml-community:2026.1"
 DEFAULT_CONTAINER_NAME="iris111-alt"
 DEFAULT_PORT="52774"
 DEFAULT_PROJECT_NAME="iris111-alt"
@@ -22,7 +22,7 @@ Options:
   -p, --port PORT           Host port to expose (default: 52774)
   -n, --name NAME           Container name (default: iris111-alt)
   -P, --project NAME        Compose project name (default: iris111-alt)
-  -i, --image IMAGE         IRIS image (default: intersystems/iris-community:2026.1)
+  -i, --image IMAGE         IRIS image (default: intersystemsdc/irishealth-ml-community:2026.1)
   -w, --workspace PATH      Workspace root to mount (default: repo root)
   -h, --help                Show this help
 
