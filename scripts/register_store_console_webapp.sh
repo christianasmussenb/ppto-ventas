@@ -4,7 +4,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WORKSPACE_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
-CONTAINER_NAME="${IRIS_CONTAINER_NAME:-iris111}"
+CONTAINER_NAME="${IRIS_CONTAINER_NAME:-ppto-ventas-iris}"
 WEB_APP_NAME="/csp/store-console"
 
 if ! command -v docker >/dev/null 2>&1; then

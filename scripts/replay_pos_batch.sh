@@ -5,7 +5,7 @@ set -euo pipefail
 MODE="${1:-dry-run}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WORKSPACE_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
-CONTAINER_NAME="${IRIS_CONTAINER_NAME:-iris111}"
+CONTAINER_NAME="${IRIS_CONTAINER_NAME:-ppto-ventas-iris}"
 INSTANCE_NAME="${IRIS_INSTANCE_NAME:-IRIS}"
 NAMESPACE="${IRIS_NAMESPACE:-USER}"
 

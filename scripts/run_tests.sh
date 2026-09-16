@@ -4,7 +4,7 @@ set -euo pipefail
 
 TEST_SCOPE="${1:-all}"
 WORKSPACE_DIR="$(cd "$(dirname "$0")/.." && pwd)"
-IRIS_CONTAINER_NAME="${IRIS_CONTAINER_NAME:-iris111}"
+IRIS_CONTAINER_NAME="${IRIS_CONTAINER_NAME:-ppto-ventas-iris}"
 
 run_iris_session() {
 	local script_file="$1"
@@ -17,7 +17,7 @@ run_iris_session() {
 }
 
 make_script_file() {
-	mktemp "${TMPDIR:-/tmp}/iris111-tests.XXXXXX"
+	mktemp "${TMPDIR:-/tmp}/ppto-ventas-tests.XXXXXX"
 }
 
 run_budget_test() {
