@@ -16,6 +16,7 @@ services:
       - ${WORKSPACE_DIR:-.}/data:/iris/data
       - ${WORKSPACE_DIR:-.}/tests:/iris/tests
       - ${WORKSPACE_DIR:-.}/frontend:/iris/frontend
+      - ${WORKSPACE_DIR:-.}/docker/iris.init:/usr/irissys/iris.init:ro
 volumes:
   ppto-ventas-data:
 networks:
