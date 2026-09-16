@@ -1,10 +1,22 @@
 services:
+  iris-data-init:
+    image: ${IRIS_IMAGE:-intersystemsdc/irishealth-ml-community:2026.1}
+    user: "0:0"
+    entrypoint: ["/bin/sh", "-c"]
+    command: ["mkdir -p /durable && chown -R 51773:51773 /durable"]
+    restart: "no"
+    volumes:
+      - ppto-ventas-data:/durable
+
   iris:
     image: ${IRIS_IMAGE:-intersystemsdc/irishealth-ml-community:2026.1}
     container_name: ppto-ventas-iris
     networks: [default, htc21-net]
     mem_limit: 4g
     restart: unless-stopped
+    depends_on:
+      iris-data-init:
+        condition: service_completed_successfully
     ports:
       - "127.0.0.1:${IRIS_WEB_PORT:-52774}:52773"
     environment:
