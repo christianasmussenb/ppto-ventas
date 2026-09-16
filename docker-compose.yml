@@ -1,14 +1,23 @@
 services:
   iris111:
     image: ${IRIS_IMAGE:-intersystems/iris-community:2026.1}
-    container_name: ${IRIS_CONTAINER_NAME:-iris111}
+    container_name: ppto-ventas-iris
+    networks: [default, htc21-net]
+    mem_limit: 4g
+    restart: unless-stopped
     ports:
-      - "${IRIS_PORT:-52773}:52773"
+      - "127.0.0.1:52773:52773"
     environment:
-      IRIS_PASSWORD: ${IRIS_PASSWORD:-SYS}
+      IRIS_PASSWORD: ${IRIS_PASSWORD:?definir en .env.docker}
+      ISC_DATA_DIRECTORY: /durable
     volumes:
+      - ppto-ventas-data:/durable
       - ${WORKSPACE_DIR:-.}/src:/iris/code
       - ${WORKSPACE_DIR:-.}/data:/iris/data
       - ${WORKSPACE_DIR:-.}/tests:/iris/tests
       - ${WORKSPACE_DIR:-.}/frontend:/iris/frontend
-    restart: unless-stopped
+volumes:
+  ppto-ventas-data:
+networks:
+  htc21-net:
+    external: true
